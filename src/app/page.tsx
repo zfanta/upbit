@@ -6,6 +6,8 @@ import { DataTable } from '@/components/table/data-table'
 import { useMemo } from 'react'
 import { columns, Data } from '@/components/table/columns'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import MetricProvider from '@/components/metricProvider'
+import Metric from '@/components/metric'
 
 export default function Home () {
   const markets = useMarkets()
@@ -44,8 +46,9 @@ export default function Home () {
   }, [markets, orderbook])
 
   return (
-    <main>
-      <Tabs defaultValue="krw" className="container mx-auto py-10">
+    <main className="container mx-auto py-10">
+      <Metric />
+      <Tabs defaultValue="krw">
         <TabsList>
           <TabsTrigger value="krw">KRW</TabsTrigger>
           <TabsTrigger value="btc">BTC</TabsTrigger>

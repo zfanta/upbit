@@ -1,7 +1,11 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useMount, useUnmount, useInterval } from 'react-use'
 
-export default function usePolling<T> (fn: () => Promise<{ body: T, status: number, remainingInMinute: number }>) {
+export default function usePolling<T> (fn: () => Promise<{
+  body: T,
+  status: number,
+  remainingInMinute: number
+}>, callback: () => void) {
   const [remainingInMinute, setRemainingInMinute] = useState(1)
   const [intervalId, setIntervalId] = useState<ReturnType<typeof setInterval> | undefined>(undefined)
   const [body, setBody] = useState<T>()
@@ -9,6 +13,7 @@ export default function usePolling<T> (fn: () => Promise<{ body: T, status: numb
 
   const request = useCallback(async () => {
     const { remainingInMinute, status, body } = await fn()
+    callback()
 
     setRemainingInMinute(remainingInMinute)
 
@@ -17,7 +22,7 @@ export default function usePolling<T> (fn: () => Promise<{ body: T, status: numb
     }
 
     setStatus(status)
-  }, [fn])
+  }, [callback, fn])
 
   useMount(request)
 

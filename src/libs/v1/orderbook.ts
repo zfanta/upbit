@@ -13,7 +13,18 @@ export default async function orderbook (markets: string[]) {
   })
 
   const status = response.status
-  const body = await response.json()
+  const body = await response.json() as {
+    market: string
+    timestamp: number
+    total_ask_size: number
+    total_bid_size: number
+    orderbook_units: {
+      ask_price: number
+      bid_price: number
+      ask_size: number
+      bid_size: number
+    }[]
+  }[]
   const remainingInMinute = getRemainingInMinute(response.headers.get('Remaining-Req'))
 
   return {
